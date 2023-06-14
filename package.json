@@ -4,7 +4,7 @@
   "description": "This extension is for add terminals automatic and run commands with an shortcut",
   "repository": "https://github.com/victorcesae/terminal-automate",
   "publisher": "victorcesae",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "icon": "logo.png",
   "engines": {
     "vscode": "^1.79.0"
@@ -13,7 +13,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.reload"
+    "onCommand:extension.reload",
+    "onExtensionInstalled"
   ],
   "pricing": "Free",
   "main": "./out/extension.js",
@@ -28,16 +29,12 @@
     },
     "commands": [
       {
-        "command": "terminal-automate.waitForKeyPress",
-        "title": "Wait for Key Press"
-      },
-      {
         "command": "terminal-automate.dynamicCommand",
         "title": "Terminal Automate: Execute the dynamic commands"
       },
       {
         "command": "terminal-automate.openForm",
-        "title": "Terminal Automate: Open the form for creating the command sequences"
+        "title": "Terminal Automate: Open the form for creating, updating or deleting the commands"
       }
     ],
     "keybindings": [
@@ -45,13 +42,13 @@
         "command": "terminal-automate.dynamicCommand",
         "key": "Ctrl+Alt+A",
         "mac": "Cmd+Alt+A",
-        "when": "editorTextFocus"
+        "when": "editorFocus || terminalFocus || notificationFocus || sideBarFocus || panelFocus"
       },
       {
         "command": "terminal-automate.openForm",
         "key": "Ctrl+Alt+R",
         "mac": "Cmd+Alt+R",
-        "when": "editorTextFocus"
+        "when": "editorFocus || terminalFocus || notificationFocus || sideBarFocus || panelFocus"
       }
     ]
   },

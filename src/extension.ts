@@ -76,18 +76,25 @@ export async function activate(context: vscode.ExtensionContext) {
   disposables.push(dynamicCommand);
 
   context.subscriptions.push(...disposables);
+  // Verificar se a extensão está sendo ativada pela primeira vez
+  if (context.globalState.get("extensionInstalled") !== true) {
+    // Marcar a extensão como instalada
+    context.globalState.update("extensionInstalled", true);
 
-  vscode.window
-    .showInformationMessage(
-      "Welcome to Terminal Automate! Do you want to register a sequence?",
-      "Yes",
-      "No"
-    )
-    .then((selection) => {
-      if (selection === "Yes") {
-        vscode.commands.executeCommand(`${extension}.openForm`);
-      }
-    });
+    // Executar a função quando a extensão é instalada
+    vscode.window
+      .showInformationMessage(
+        "Welcome to Terminal Automate! Do you want to register a sequence?",
+        "Yes",
+        "No"
+      )
+      .then((selection) => {
+        if (selection === "Yes") {
+          vscode.commands.executeCommand(`${extension}.openForm`);
+        }
+      });
+  }
+
   // Prompt the user to register a sequence after installation
 }
 
@@ -141,9 +148,27 @@ async function openSequenceForm(
       value: command?.sequences?.[terminal]?.text,
     });
     if (!stepText) {
-      if (command?.sequences?.[terminal])
-        command?.sequences?.splice(terminal, 1);
-      break;
+      if (!command?.sequences?.[terminal]) break;
+      const selectedCommand = await vscode.window.showQuickPick(
+        [
+          { label: "Remover sequência", description: "delete" },
+          { label: "Cancelar", description: "cancel" },
+        ],
+        { placeHolder: "Are you sure you want to remove this sequence?" }
+      );
+      if (!selectedCommand) break;
+      switch (selectedCommand.description) {
+        case "delete":
+          command?.sequences?.splice(terminal, 1);
+          continue;
+        case "cancel":
+          break;
+
+        default:
+          break;
+      }
+      terminal--;
+      continue;
     }
 
     const stepTerminal = await vscode.window.showInputBox({
