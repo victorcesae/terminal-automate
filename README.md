@@ -38,7 +38,6 @@ Contribuições são bem-vindas! Sinta-se à vontade para fazer um fork do repos
 ## Autor
 
 Victor Evangelista<br>
-E-mail: victor.evangelista2010@gmail.com<br>
 
 ## Licença
 
